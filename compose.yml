@@ -1,7 +1,7 @@
 
 services:
   juice-shop:
-    image: juice-shop:local
+    image: jeanpaul60001/juice-shop:1.0.0
     container_name: juice-shop
     restart: unless-stopped
     expose:
@@ -19,7 +19,7 @@ services:
       - juice-shop
 
   mongodb:
-    image: mongo:8
+    image: mongo:7
     container_name: mongodb-container
     restart: unless-stopped
     ports:
