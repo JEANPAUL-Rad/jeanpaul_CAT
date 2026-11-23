@@ -11,7 +11,13 @@ COPY . /juice-shop
 WORKDIR /juice-shop
 
 RUN npm install -g typescript@^6.0.3
-RUN npm install --omit=dev
+
+ENV npm_config_fetch_retries=8
+ENV npm_config_fetch_retry_mintimeout=20000
+ENV npm_config_fetch_retry_maxtimeout=120000
+ENV npm_config_fetch_timeout=300000
+
+RUN npm install --omit=dev --prefer-offline
 RUN npm dedupe --omit=dev
 
 RUN rm -rf frontend/node_modules frontend/.angular frontend/src/assets
