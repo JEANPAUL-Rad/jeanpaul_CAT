@@ -1,8 +1,7 @@
-
 services:
   juice-shop:
-    image: jeanpaul60001/juice-shop:1.0.0
-    container_name: juice-shop
+    image: jeanpaul60001/jeanpaul-cat:v6
+    container_name: jeanpaul-cat
     restart: unless-stopped
     expose:
       - "3000"
@@ -18,6 +17,31 @@ services:
     depends_on:
       - juice-shop
 
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+
+  grafana:
+    image: grafana/grafana:12.2.0
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+
   mongodb:
     image: mongo:7
     container_name: mongodb-container
@@ -29,3 +53,5 @@ services:
 
 volumes:
   mongo-data:
+  prometheus-data:
+  grafana-data:
